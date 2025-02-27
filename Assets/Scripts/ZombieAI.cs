@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class ZombieAI : MonoBehaviour
 {
-    public float m_MoveSpeed;      // 좀비의 이동 속도
-    public float m_JumpForce;      // 점프 힘
+    public float m_MaxSpeedLeft;
+    public float m_MaxSpeedRight;
+    public float m_ForceForward;
+    public float m_ForceToBelowEnemy;
+    public float m_JumpForce;
     public float m_AttackRaycastDistance;
     public float m_FrontRaycastDistance;
     public int m_Damage;
@@ -48,11 +51,21 @@ public class ZombieAI : MonoBehaviour
         ValidateJump();
         //Debug.DrawLine(originFront, originFront + new Vector2(-m_FrontRaycastDistance, 0f));
         //Debug.DrawLine(originFront + new Vector2(0f, Collider2D.size.y), originFront + new Vector2(-m_FrontRaycastDistance, Collider2D.size.y));
+
+        SetMaxVelocity();
+    }
+
+    private void SetMaxVelocity()
+    {
+        var clampedVelocity = Mathf.Clamp(_rigidBody.velocity.x, m_MaxSpeedLeft, m_MaxSpeedRight);
+        _rigidBody.velocity = new Vector2(clampedVelocity, _rigidBody.velocity.y);
     }
 
     private void MoveForward()
     {
-        _rigidBody.velocity = new Vector2(m_MoveSpeed, _rigidBody.velocity.y);
+        _rigidBody.AddForce(Vector2.right * m_ForceForward, ForceMode2D.Impulse);
+        //_rigidBody.AddForce(new Vector2(m_ForceForward, _rigidBody.velocity.y), ForceMode2D.Force);
+        //_rigidBody.velocity = new Vector2(m_ForceForward, _rigidBody.velocity.y);
     }
 
     private void ValidateAttack()
@@ -122,6 +135,11 @@ public class ZombieAI : MonoBehaviour
         }
     }
 
+    public bool IsGrounded()
+    {
+        return _isGrounded;
+    }
+
     public void SetEnemyLayerIndex(int index)
     {
         m_EnemyLayerIndex = index;
@@ -156,20 +174,21 @@ public class ZombieAI : MonoBehaviour
         {
             _isOnCollider = true;
         }
-
-        // TODO. OnCollisionStay2D 확인. 아래의 충돌한 물체가 있으면 아래 물체를 오른쪽으로 AddForce 하는 방법 체크
-        // 충돌한 물체가 위에서 눌렀는지 확인
+    }
+    
+    void OnCollisionStay2D(Collision2D collision)
+    {
         foreach (ContactPoint2D contact in collision.contacts)
         {
+            //if (contact.la)
             // 충돌 각도가 위쪽에서 눌렀을 때만 적용
             if (contact.normal.y < -0.5f)
             {
-                Vector2 pushDirection = Vector2.right;
+                var zombieAI = _rigidBody.gameObject.GetComponent<ZombieAI>();
+                if (zombieAI.IsGrounded() == false)
+                    continue;
+                _rigidBody.AddForce(Vector2.right * m_ForceToBelowEnemy, ForceMode2D.Impulse);
                 
-                // 옆으로 밀리는 Force 적용 (Impulse 모드)
-                _rigidBody.AddForce(pushDirection * 5f, ForceMode2D.Impulse);
-
-                Debug.Log("위에서 눌림: " + collision.collider.name);
                 break;  // 여러 접점 중 하나만 적용
             }
         }

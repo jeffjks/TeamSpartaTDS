@@ -419,6 +419,7 @@ GameObject:
   m_Component:
   - component: {fileID: 360675798204360400}
   - component: {fileID: 8125553017988966147}
+  - component: {fileID: 396924358802984639}
   m_Layer: 3
   m_Name: Box
   m_TagString: Hero
@@ -458,6 +459,22 @@ MonoBehaviour:
   m_HitPoint: 100
   m_Collider2D: {fileID: 6393026852875248614}
   m_Slider: {fileID: 134779646897404493}
+--- !u!114 &396924358802984639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6628118391875189848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55b5cd4d8d122d34f80b7af54133efda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HasHitPoint: {fileID: 8125553017988966147}
+  m_SpriteRenderer: {fileID: 428821504350599970}
+  m_FlashMaterial: {fileID: 2100000, guid: 7150a9b9ebf9f904b9d1ba4f5e06e12c, type: 2}
+  m_Duration: 0.25
 --- !u!1 &6872163726244765423
 GameObject:
   m_ObjectHideFlags: 0
