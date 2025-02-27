@@ -1,13 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public abstract class HasHitPoint : MonoBehaviour
 {
     public int m_HitPoint;
-    public UnityAction m_UA_OnCurrentHitPointUpdated;
-    public UnityAction m_UA_OnTakeDamage;
+    public event Action OnCurrentHitPointUpdated;
+    public event Action OnTakeDamage;
+    public event Action OnDeath;
     
     public int CurrentHitPoint {
         get {
@@ -15,14 +16,14 @@ public abstract class HasHitPoint : MonoBehaviour
         }
         set {
             _currentHitPoint = value;
-            m_UA_OnCurrentHitPointUpdated?.Invoke();
+            OnCurrentHitPointUpdated?.Invoke();
         }
     }
     protected int _currentHitPoint;
 
     public virtual void TakeDamage(int damage)
     {
-        m_UA_OnTakeDamage?.Invoke();
+        OnTakeDamage?.Invoke();
         CurrentHitPoint = Mathf.Max(0, CurrentHitPoint - damage);
         if (CurrentHitPoint <= 0)
         {
@@ -32,6 +33,7 @@ public abstract class HasHitPoint : MonoBehaviour
 
     private void Death()
     {
+        OnDeath?.Invoke();
         Destroy(gameObject);
     }
 }

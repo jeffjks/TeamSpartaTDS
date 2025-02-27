@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerBox : HasHitPoint
+public class PlayerBox : PlayerTowerUnit
 {
-    public Collider2D m_Collider2D;
     public Slider m_Slider;
 
     private void UpdateSlider()
@@ -15,17 +14,26 @@ public class PlayerBox : HasHitPoint
 
     private void Awake()
     {
+        _playerTower = GetComponentInParent<PlayerTower>();
         CurrentHitPoint = m_HitPoint;
         HitPointManager.CachedHitPoint.Add(m_Collider2D, this);
+        UpdateSlider();
     }
 
     private void OnEnable()
     {
-        m_UA_OnCurrentHitPointUpdated += UpdateSlider;
+        OnCurrentHitPointUpdated += UpdateSlider;
+        OnDeath += DestroyTower;
     }
 
     private void OnDisable()
     {
-        m_UA_OnCurrentHitPointUpdated -= UpdateSlider;
+        OnCurrentHitPointUpdated -= UpdateSlider;
+        OnDeath -= DestroyTower;
+    }
+
+    private void DestroyTower()
+    {
+        _playerTower.RemoveTowerUnit(this);
     }
 }

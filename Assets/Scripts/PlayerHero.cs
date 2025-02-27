@@ -1,18 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerHero : HasHitPoint
+public class PlayerHero : PlayerTowerUnit
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        _playerTower = GetComponentInParent<PlayerTower>();
+        CurrentHitPoint = m_HitPoint;
+        HitPointManager.CachedHitPoint.Add(m_Collider2D, this);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        
+        OnDeath += DestroyTower;
+    }
+
+    private void OnDisable()
+    {
+        OnDeath -= DestroyTower;
+    }
+
+    private void DestroyTower()
+    {
+        _playerTower.RemoveTowerUnit(this);
     }
 }

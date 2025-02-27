@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ZombieAI : MonoBehaviour
@@ -49,8 +50,6 @@ public class ZombieAI : MonoBehaviour
 
         ValidateAttack();
         ValidateJump();
-        //Debug.DrawLine(originFront, originFront + new Vector2(-m_FrontRaycastDistance, 0f));
-        //Debug.DrawLine(originFront + new Vector2(0f, Collider2D.size.y), originFront + new Vector2(-m_FrontRaycastDistance, Collider2D.size.y));
 
         SetMaxVelocity();
     }
@@ -146,7 +145,7 @@ public class ZombieAI : MonoBehaviour
         var layerName = $"Enemy{index + 1}";
         _enemyLayer = LayerMask.GetMask(layerName);
         SetLayer(layerName);
-        _groundY = GroundManager.GroundLayerY + GroundManager.GroundLayerInterval * index;
+        _groundY = GameManager.Instance.m_GroundLayerY + GameManager.Instance.m_GroundLayerInterval * index;
     }
 
     public void SetLayer(string name)

@@ -12,12 +12,12 @@ public class DamageColorBlender : MonoBehaviour
 
     private void OnEnable()
     {
-        m_HasHitPoint.m_UA_OnTakeDamage += StartFlash;
+        m_HasHitPoint.OnTakeDamage += StartFlash;
     }
 
     private void OnDisable()
     {
-        m_HasHitPoint.m_UA_OnTakeDamage -= StartFlash;
+        m_HasHitPoint.OnTakeDamage -= StartFlash;
         StopFlash();
     }
 

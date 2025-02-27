@@ -103,7 +103,7 @@ MonoBehaviour:
   m_JumpForce: 56
   m_AttackRaycastDistance: 0.25
   m_FrontRaycastDistance: 0.5
-  m_Damage: 0
+  m_Damage: 5
   m_AttackDelay: 0.5
   m_JumpDelayMin: 0.5
   m_JumpDelayMax: 1
