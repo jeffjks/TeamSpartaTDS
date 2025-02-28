@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public float m_GroundLayerY;
     public float m_GroundLayerInterval;
     public float m_EnemyBorderX;
+
+    public LayerMask m_EnemyLayer;
     
     public static GameManager Instance { get; private set; }
 

@@ -95,7 +95,6 @@ public class ZombieAI : MonoBehaviour
 
         _checkForward1 = Physics2D.Raycast(originFront, Vector2.left, m_FrontRaycastDistance, _enemyLayer);
         _checkForward2 = Physics2D.Raycast(originFront + new Vector2(0f, Collider2D.size.y), Vector2.left, m_FrontRaycastDistance, _enemyLayer);
-        Debug.DrawLine(originFront + new Vector2(0f, Collider2D.size.y), originFront + new Vector2(-m_FrontRaycastDistance, Collider2D.size.y));
 
         var canClimb = _checkForward1 && !_checkForward2;
         var onGround = _isGrounded || _isOnCollider;
@@ -119,13 +118,12 @@ public class ZombieAI : MonoBehaviour
         SetNextJumpDelay();
     }
 
-    // 바닥에 닿았을 때
     private void OnGround()
     {
         if (transform.position.y <= _groundY)
         {
             transform.position = new Vector2(transform.position.x, _groundY);
-            _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, 0f); // 아래로 떨어지지 않음
+            _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, 0f);
             _isGrounded = true;
         }
         else
@@ -167,20 +165,18 @@ public class ZombieAI : MonoBehaviour
         _nextJumpDelay = Random.Range(m_JumpDelayMin, m_JumpDelayMax);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        if (collision.contacts[0].normal.y > 0.5f)
+        if (other.contacts[0].normal.y > 0.5f)
         {
             _isOnCollider = true;
         }
     }
     
-    void OnCollisionStay2D(Collision2D collision)
+    void OnCollisionStay2D(Collision2D other)
     {
-        foreach (ContactPoint2D contact in collision.contacts)
+        foreach (ContactPoint2D contact in other.contacts)
         {
-            //if (contact.la)
-            // 충돌 각도가 위쪽에서 눌렀을 때만 적용
             if (contact.normal.y < -0.5f)
             {
                 var zombieAI = _rigidBody.gameObject.GetComponent<ZombieAI>();
@@ -188,7 +184,7 @@ public class ZombieAI : MonoBehaviour
                     continue;
                 _rigidBody.AddForce(Vector2.right * m_ForceToBelowEnemy, ForceMode2D.Impulse);
                 
-                break;  // 여러 접점 중 하나만 적용
+                break; // 여러 접점 중 하나만 적용
             }
         }
     }

@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 7016750400611631704}
   - component: {fileID: 4539630435709564979}
   - component: {fileID: 8019772707387173566}
+  - component: {fileID: 1920112295959500066}
+  - component: {fileID: 2408100833327618419}
   m_Layer: 0
   m_Name: ZombieMelee
   m_TagString: Untagged
@@ -103,7 +105,7 @@ MonoBehaviour:
   m_JumpForce: 56
   m_AttackRaycastDistance: 0.25
   m_FrontRaycastDistance: 0.5
-  m_Damage: 5
+  m_Damage: 0
   m_AttackDelay: 0.5
   m_JumpDelayMin: 0.5
   m_JumpDelayMax: 1
@@ -112,6 +114,34 @@ MonoBehaviour:
     m_Bits: 8
   Collider2D: {fileID: 3957709957051521112}
   m_EnemyLayerIndex: 0
+--- !u!114 &1920112295959500066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319310827380095937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c866b39b7e993b84387422fee21f5d52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HitPoint: 1000
+--- !u!114 &2408100833327618419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319310827380095937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55b5cd4d8d122d34f80b7af54133efda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HasHitPoint: {fileID: 1920112295959500066}
+  m_FlashMaterial: {fileID: 2100000, guid: 7150a9b9ebf9f904b9d1ba4f5e06e12c, type: 2}
+  m_Duration: 0.25
 --- !u!1 &2094693183665648150
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,7 +470,7 @@ GameObject:
   - component: {fileID: 3957709957051521112}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class DamageColorBlender : MonoBehaviour
 {
     public HasHitPoint m_HasHitPoint;
-    public SpriteRenderer m_SpriteRenderer;
     public Material m_FlashMaterial;
     public float m_Duration = 0.25f;
+
+    private SpriteRenderer[] _spriteRenderers;
+    private Material[] _originalMaterials;
+    protected MaterialPropertyBlock[] _materialPropertyBlocks;
+    private Coroutine _flashCoroutine;
     private bool _isFlashing = false;
 
     private void OnEnable()
@@ -21,13 +26,17 @@ public class DamageColorBlender : MonoBehaviour
         StopFlash();
     }
 
-    private Material _originalMaterial;
-
-    private Coroutine _flashCoroutine;
-
-    private void Start()
+    private void Awake()
     {
-        _originalMaterial = m_SpriteRenderer.sharedMaterial;
+        _spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+        _materialPropertyBlocks = new MaterialPropertyBlock[_spriteRenderers.Length];
+        _originalMaterials = new Material[_spriteRenderers.Length];
+
+        for (var i = 0; i < _spriteRenderers.Length; ++i)
+        {
+            _materialPropertyBlocks[i] = new MaterialPropertyBlock();
+            _originalMaterials[i] = _spriteRenderers[i].sharedMaterial;
+        }
     }
 
     private void StartFlash()
@@ -44,7 +53,7 @@ public class DamageColorBlender : MonoBehaviour
         }
         if (gameObject.activeSelf)
         {
-            _flashCoroutine = StartCoroutine(FlashRoutine());
+            _flashCoroutine = StartCoroutine(WhiteFlash());
         }
     }
 
@@ -53,29 +62,55 @@ public class DamageColorBlender : MonoBehaviour
         if (_flashCoroutine != null)
         {
             StopCoroutine(_flashCoroutine);
-            m_SpriteRenderer.material = _originalMaterial;
+            SetSpriteMaterial(_originalMaterials);
             _flashCoroutine = null;
         }
         _isFlashing = false;
     }
 
-    private IEnumerator FlashRoutine()
+    private IEnumerator WhiteFlash()
     {
-        if (m_SpriteRenderer != null)
+        if (_spriteRenderers != null)
         {
             var elapsedTime = 0f;
-            m_SpriteRenderer.material = m_FlashMaterial;
+            
+            SetSpriteMaterial(m_FlashMaterial);
             while (elapsedTime < m_Duration)
             {
                 var flashAmount = Mathf.Lerp(1f, 0f, elapsedTime / m_Duration);
-                m_FlashMaterial.SetFloat("_FlashAmount", flashAmount);
+
+                for (var i = 0; i < _spriteRenderers.Length; ++i)
+                {
+                    _spriteRenderers[i].GetPropertyBlock(_materialPropertyBlocks[i]);
+                    _materialPropertyBlocks[i].SetFloat("_FlashAmount", flashAmount);
+                    _spriteRenderers[i].SetPropertyBlock(_materialPropertyBlocks[i]);
+                }
+                
+                //m_FlashMaterial.SetFloat("_FlashAmount", flashAmount);
+                
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
-            m_SpriteRenderer.material = _originalMaterial;
+            SetSpriteMaterial(_originalMaterials);
         }
         _flashCoroutine = null;
         _isFlashing = false;
         yield break;
+    }
+
+    private void SetSpriteMaterial(Material newMaterial)
+    {
+        for (var i = 0; i < _spriteRenderers.Length; ++i)
+        {
+            _spriteRenderers[i].material = newMaterial;
+        }
+    }
+
+    private void SetSpriteMaterial(Material[] newMaterials)
+    {
+        for (var i = 0; i < _spriteRenderers.Length; ++i)
+        {
+            _spriteRenderers[i].material = newMaterials[i];
+        }
     }
 }
