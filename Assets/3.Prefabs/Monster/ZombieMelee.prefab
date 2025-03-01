@@ -105,7 +105,7 @@ MonoBehaviour:
   m_JumpForce: 56
   m_AttackRaycastDistance: 0.25
   m_FrontRaycastDistance: 0.5
-  m_Damage: 0
+  m_Damage: 5
   m_AttackDelay: 0.5
   m_JumpDelayMin: 0.5
   m_JumpDelayMax: 1
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c866b39b7e993b84387422fee21f5d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HitPoint: 1000
+  m_HitPoint: 10
 --- !u!114 &2408100833327618419
 MonoBehaviour:
   m_ObjectHideFlags: 0

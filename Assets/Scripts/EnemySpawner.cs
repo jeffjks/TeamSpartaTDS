@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public ZombieAI m_Enemy;
+    public EnemyZombie m_Enemy;
     public int m_EnemyLayerIndex;
 
     public float m_SpawnDelayMin;
@@ -13,7 +13,7 @@ public class EnemySpawner : MonoBehaviour
     
     private void Start()
     {
-        SetNextSpawnDelay();
+        _nextSpawnDelay = Random.Range(0f, m_SpawnDelayMax);
     }
 
     private void Update()
