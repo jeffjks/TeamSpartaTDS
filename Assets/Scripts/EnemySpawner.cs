@@ -36,6 +36,6 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnEnemy()
     {
         var ins = Instantiate(m_Enemy, transform.position, Quaternion.identity);
-        ins.GetComponent<ZombieAI>().SetEnemyLayerIndex(m_EnemyLayerIndex);
+        ins.GetComponent<EnemyZombie>().SetEnemyLayerIndex(m_EnemyLayerIndex);
     }
 }

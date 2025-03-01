@@ -113,7 +113,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   Collider2D: {fileID: 3957709957051521112}
-  m_EnemyLayerIndex: 0
 --- !u!114 &1920112295959500066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,6 +126,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HitPoint: 10
+  m_EnemyLayerIndex: 0
+  m_SortingGroup: {fileID: 7672114206097646266}
 --- !u!114 &2408100833327618419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -682,6 +683,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1639109334033341928}
+  - component: {fileID: 7672114206097646266}
   m_Layer: 0
   m_Name: bodyPivot
   m_TagString: Untagged
@@ -710,6 +712,18 @@ Transform:
   - {fileID: 5549818585384498318}
   m_Father: {fileID: 1174570720321624928}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &7672114206097646266
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6840219418452013153}
+  m_Enabled: 1
+  m_SortingLayerID: -1328764483
+  m_SortingLayer: 1
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &7189000493299460377
 GameObject:
   m_ObjectHideFlags: 0

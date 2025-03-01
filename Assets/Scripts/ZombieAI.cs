@@ -17,30 +17,24 @@ public class ZombieAI : MonoBehaviour
     public float m_JumpDelayMin, m_JumpDelayMax;
     public LayerMask m_PlayerLayer;
     public CapsuleCollider2D Collider2D;
-    public int m_EnemyLayerIndex;
 
+    private EnemyZombie _enemyZombie;
     private Rigidbody2D _rigidBody;
     private bool _isGrounded = false;
     private bool _isOnCollider = false;
-    private bool _checkForward1 = false;
-    private bool _checkForward2 = false;
-    private bool _checkUpward = false;
     private float _currentAttackDelay;
     private float _currentJumpDelay;
     private float _nextJumpDelay;
-    private LayerMask _enemyLayer;
-    private float _groundY;
 
     private const float RaycastUpwardDistance = 10f;
     private const float Padding = 0.1f;
 
     private void Start()
     {
+        _enemyZombie = GetComponent<EnemyZombie>();
         _rigidBody = GetComponent<Rigidbody2D>();
 
         SetNextJumpDelay();
-
-        SetEnemyLayerIndex(m_EnemyLayerIndex);
     }
 
     private void FixedUpdate()
@@ -63,8 +57,6 @@ public class ZombieAI : MonoBehaviour
     private void MoveForward()
     {
         _rigidBody.AddForce(Vector2.right * m_ForceForward, ForceMode2D.Impulse);
-        //_rigidBody.AddForce(new Vector2(m_ForceForward, _rigidBody.velocity.y), ForceMode2D.Force);
-        //_rigidBody.velocity = new Vector2(m_ForceForward, _rigidBody.velocity.y);
     }
 
     private void ValidateAttack()
@@ -93,17 +85,20 @@ public class ZombieAI : MonoBehaviour
         Vector2 origin = transform.position + Collider2D.transform.localPosition;
         var originFront = origin - new Vector2(Collider2D.size.x / 2f + 0.1f, 0f);
 
-        _checkForward1 = Physics2D.Raycast(originFront, Vector2.left, m_FrontRaycastDistance, _enemyLayer);
-        _checkForward2 = Physics2D.Raycast(originFront + new Vector2(0f, Collider2D.size.y), Vector2.left, m_FrontRaycastDistance, _enemyLayer);
+        var hitFront1 = Physics2D.Raycast(originFront, Vector2.left, m_FrontRaycastDistance, _enemyZombie.EnemyLayer);
+        var hitFront2 = Physics2D.Raycast(originFront + new Vector2(0f, Collider2D.size.y), Vector2.left, m_FrontRaycastDistance, _enemyZombie.EnemyLayer);
+        bool isFrontEnemyMoving = hitFront1 ? hitFront1.rigidbody.velocity.x < -0.5f : false;
 
-        var canClimb = _checkForward1 && !_checkForward2;
+        var hitUpward = Physics2D.Raycast(origin + new Vector2(0f, Collider2D.size.y), Vector2.up, 10f, _enemyZombie.EnemyLayer);
+
+        var canClimb = hitFront1 && !hitFront2 && !isFrontEnemyMoving;
         var onGround = _isGrounded || _isOnCollider;
         
         if (_currentJumpDelay < _nextJumpDelay)
         {
             _currentJumpDelay += Time.deltaTime;
         }
-        else if (canClimb && onGround && _checkUpward == false)
+        else if (canClimb && onGround && hitUpward == false)
         {
             ExecuteJump();
         }
@@ -120,9 +115,9 @@ public class ZombieAI : MonoBehaviour
 
     private void OnGround()
     {
-        if (transform.position.y <= _groundY)
+        if (transform.position.y <= _enemyZombie.GroundY)
         {
-            transform.position = new Vector2(transform.position.x, _groundY);
+            transform.position = new Vector2(transform.position.x, _enemyZombie.GroundY);
             _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, 0f);
             _isGrounded = true;
         }
@@ -135,29 +130,6 @@ public class ZombieAI : MonoBehaviour
     public bool IsGrounded()
     {
         return _isGrounded;
-    }
-
-    public void SetEnemyLayerIndex(int index)
-    {
-        m_EnemyLayerIndex = index;
-        var layerName = $"Enemy{index + 1}";
-        _enemyLayer = LayerMask.GetMask(layerName);
-        SetLayer(layerName);
-        _groundY = GameManager.Instance.m_GroundLayerY + GameManager.Instance.m_GroundLayerInterval * index;
-    }
-
-    public void SetLayer(string name)
-    {
-        SetLayersRecursively(transform, name);
-    }
-    
-    public void SetLayersRecursively(Transform trans, string name)
-    {
-        trans.gameObject.layer = LayerMask.NameToLayer(name);
-        foreach(Transform child in trans)
-        {
-            SetLayersRecursively(child, name);
-        }
     }
 
     private void SetNextJumpDelay()
