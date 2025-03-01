@@ -9,7 +9,7 @@ public class PlayerBox : PlayerTowerUnit
 
     private void UpdateSlider()
     {
-        m_Slider.value = (float) _currentHitPoint / m_HitPoint;
+        m_Slider.value = (float) CurrentHitPoint / m_HitPoint;
     }
 
     private void Awake()

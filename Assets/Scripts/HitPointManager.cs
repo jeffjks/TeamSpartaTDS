@@ -19,7 +19,7 @@ public abstract class HasHitPoint : MonoBehaviour
             OnCurrentHitPointUpdated?.Invoke();
         }
     }
-    protected int _currentHitPoint;
+    private int _currentHitPoint;
 
     public virtual void TakeDamage(int damage)
     {
