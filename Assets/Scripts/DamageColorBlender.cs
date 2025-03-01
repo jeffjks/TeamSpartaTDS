@@ -86,8 +86,6 @@ public class DamageColorBlender : MonoBehaviour
                     _spriteRenderers[i].SetPropertyBlock(_materialPropertyBlocks[i]);
                 }
                 
-                //m_FlashMaterial.SetFloat("_FlashAmount", flashAmount);
-                
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
@@ -95,7 +93,6 @@ public class DamageColorBlender : MonoBehaviour
         }
         _flashCoroutine = null;
         _isFlashing = false;
-        yield break;
     }
 
     private void SetSpriteMaterial(Material newMaterial)

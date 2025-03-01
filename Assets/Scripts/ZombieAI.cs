@@ -27,7 +27,6 @@ public class ZombieAI : MonoBehaviour
     private float _nextJumpDelay;
 
     private const float RaycastUpwardDistance = 10f;
-    private const float Padding = 0.1f;
 
     private void Start()
     {
@@ -89,7 +88,7 @@ public class ZombieAI : MonoBehaviour
         var hitFront2 = Physics2D.Raycast(originFront + new Vector2(0f, Collider2D.size.y), Vector2.left, m_FrontRaycastDistance, _enemyZombie.EnemyLayer);
         bool isFrontEnemyMoving = hitFront1 ? hitFront1.rigidbody.velocity.x < -0.5f : false;
 
-        var hitUpward = Physics2D.Raycast(origin + new Vector2(0f, Collider2D.size.y), Vector2.up, 10f, _enemyZombie.EnemyLayer);
+        var hitUpward = Physics2D.Raycast(origin + new Vector2(0f, Collider2D.size.y), Vector2.up, RaycastUpwardDistance, _enemyZombie.EnemyLayer);
 
         var canClimb = hitFront1 && !hitFront2 && !isFrontEnemyMoving;
         var onGround = _isGrounded || _isOnCollider;
@@ -145,7 +144,7 @@ public class ZombieAI : MonoBehaviour
         }
     }
     
-    void OnCollisionStay2D(Collision2D other)
+    private void OnCollisionStay2D(Collision2D other)
     {
         foreach (ContactPoint2D contact in other.contacts)
         {
@@ -156,7 +155,7 @@ public class ZombieAI : MonoBehaviour
                     continue;
                 _rigidBody.AddForce(Vector2.right * m_ForceToBelowEnemy, ForceMode2D.Impulse);
                 
-                break; // 여러 접점 중 하나만 적용
+                break;
             }
         }
     }

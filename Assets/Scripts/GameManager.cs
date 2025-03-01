@@ -21,12 +21,3 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 }
-
-public abstract class PlayerTowerUnit : HasHitPoint
-{
-    public float m_Height;
-    public int m_HeightLevel;
-    public Collider2D m_Collider2D;
-
-    protected PlayerTower _playerTower;
-}

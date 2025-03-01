@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public abstract class PlayerTowerUnit : HasHitPoint
+{
+    public float m_Height;
+    public Collider2D m_Collider2D;
+    [HideInInspector] public int m_HeightLevel;
+
+    protected PlayerTower _playerTower;
+}
+
 public class PlayerTower : MonoBehaviour
 {
     public Collider2D m_EnemyBorderCollider;
